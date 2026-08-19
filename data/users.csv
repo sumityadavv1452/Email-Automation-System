@@ -1,0 +1,7 @@
+name,email,product,order_id,promo_code
+John Doe,john.doe@example.com,Wireless Headphones,ORD-10091,SAVE10
+Jane Smith,invalid_email_format,Smart Watch,ORD-10092,SAVE15
+Alex Johnson,alex.johnson@example.org,Gaming Keyboard,ORD-10093,SAVE20
+Diana Prince,diana.prince@example.net,4K Monitor,ORD-10094,SAVE25
+Evan Wright,evan.wright@example.com,Ergonomic Chair,ORD-10095,SAVE30
+Fiona Gallagher,fiona.gallagher@example.io,Noise Cancelling Earbuds,ORD-10096,SAVE35

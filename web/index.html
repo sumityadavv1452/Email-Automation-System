@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Automation System - Control Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-title p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #334155;
+            color: #f8fafc;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-success {
+            background-color: var(--accent-green);
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .dashboard-container {
+            flex: 1;
+            padding: 30px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+        }
+
+        .panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-controls {
+            display: flex;
+            background: #0f172a;
+            padding: 4px;
+            border-radius: 8px;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .data-table-container {
+            overflow-x: auto;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--text-secondary);
+            padding: 12px 16px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-badge.ok, .status-badge.success, .status-badge.dry_run_success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.skipped, .status-badge.retried {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.failed, .status-badge.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Preview Frame */
+        .preview-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select {
+            background: #0f172a;
+            color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            flex: 1;
+            outline: none;
+        }
+
+        .preview-frame-wrapper {
+            background-color: #ffffff;
+            border-radius: 10px;
+            flex: 1;
+            min-height: 480px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 30px;
+            width: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal h2 {
+            font-size: 18px;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        #notification {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            padding: 14px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            display: none;
+            font-size: 14px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon">✉️</div>
+            <div class="logo-title">
+                <h1>Email Automation System</h1>
+                <p>Bulk Personalization & Dispatch Control Dashboard</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="triggerDryRun()">⚡ Run Dry-Run Preview</button>
+            <button class="btn btn-secondary" onclick="openTestModal()">✉️ Send Test Email</button>
+            <button class="btn btn-success" onclick="triggerBulkSend()">🚀 Start Bulk Send</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Left Panel: Recipient Dataset & Delivery Logs -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span id="tab-title">Recipient Dataset (users.csv)</span>
+                </div>
+                <div class="tab-controls">
+                    <button class="tab-btn active" id="btn-users" onclick="switchTab('users')">Recipients</button>
+                    <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Audit Logs</button>
+                </div>
+            </div>
+
+            <div class="data-table-container">
+                <table id="main-table">
+                    <thead id="table-head">
+                        <!-- Dynamic Header -->
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Dynamic Content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Panel: Live Template Previewer -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">HTML Email Previewer</div>
+                <div class="preview-selector">
+                    <label for="preview-select" style="font-size: 12px; color: var(--text-secondary);">Select User:</label>
+                    <select id="preview-select" onchange="loadPreview(this.value)">
+                        <!-- Dynamic Preview Files -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="preview-frame-wrapper">
+                <iframe id="preview-iframe" src="about:blank"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Send Modal -->
+    <div class="modal-overlay" id="test-modal">
+        <div class="modal">
+            <h2>Send Single Test Email</h2>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+                Enter your email address to receive a real test email formatted with data from the first CSV row.
+            </p>
+            <input type="email" id="test-email-input" placeholder="you@example.com" />
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeTestModal()">Cancel</button>
+                <button class="btn" onclick="submitTestSend()">Send Test Email</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification">Notification Message</div>
+
+    <script>
+        let currentTab = 'users';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+            loadPreviewsList();
+        });
+
+        function showNotification(msg, isError = false) {
+            const notif = document.getElementById('notification');
+            notif.innerText = msg;
+            notif.style.borderColor = isError ? 'var(--accent-red)' : 'var(--accent-blue)';
+            notif.style.display = 'block';
+            setTimeout(() => { notif.style.display = 'none'; }, 4000);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('btn-users').classList.toggle('active', tab === 'users');
+            document.getElementById('btn-logs').classList.toggle('active', tab === 'logs');
+            
+            if (tab === 'users') {
+                document.getElementById('tab-title').innerText = 'Recipient Dataset (users.csv)';
+                loadUsers();
+            } else {
+                document.getElementById('tab-title').innerText = 'Delivery Audit Logs (email_log.csv)';
+                loadLogs();
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/users');
+                const users = await res.json();
+                
+                const thead = document.getElementById('table-head');
+                const tbody = document.getElementById('table-body');
+                
+                thead.innerHTML = `<tr><th>Name</th><th>Email</th><th>Product</th><th>Order ID</th><th>Status</th></tr>`;
+                tbody.innerHTML = users.map(u => {
+                    const isInvalid = u.email === 'invalid_email_format' || !u.email.includes('@');
+                    const badgeClass = isInvalid ? 'skipped' : 'ok';
+                    const badgeText = isInvalid ? 'INVALID REGEX' : 'VALID';
+                    return `<tr>
+                        <td><strong>${u.name || ''}</strong></td>
+                        <td>${u.email || ''}</td>
+                        <td>${u.product || ''}</td>
+                        <td>${u.order_id || ''}</td>
+                        <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+                    </tr>`;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadLogs() {
+            try {
+                const res = await fetch('/api/logs');
+                const logs = await res.json();
+                
+                const thead = document.getElementById('table-head');
+                const tbody = document.getElementById('table-body');
+                
+                thead.innerHTML = `<tr><th>Timestamp</th><th>Recipient</th><th>Status</th><th>Error Details</th></tr>`;
+                tbody.innerHTML = logs.map(l => {
+                    const statusClass = (l.status || '').toLowerCase();
+                    return `<tr>
+                        <td style="font-size:11px; color:var(--text-secondary);">${l.timestamp || ''}</td>
+                        <td><strong>${l.name || l.recipient_email || ''}</strong><br><span style="font-size:11px; color:var(--text-secondary);">${l.recipient_email || ''}</span></td>
+                        <td><span class="status-badge ${statusClass}">${l.status || ''}</span></td>
+                        <td style="font-size:11px; color:var(--text-secondary);">${l.error_message || '-'}</td>
+                    </tr>`;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadPreviewsList() {
+            try {
+                const res = await fetch('/api/previews');
+                const files = await res.json();
+                const select = document.getElementById('preview-select');
+                
+                if (files.length === 0) {
+                    select.innerHTML = '<option value="">No preview files found (Run Dry Run first)</option>';
+                    document.getElementById('preview-iframe').src = 'about:blank';
+                    return;
+                }
+                
+                select.innerHTML = files.map(f => `<option value="${f}">${f}</option>`).join('');
+                loadPreview(files[0]);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function loadPreview(filename) {
+            if (filename) {
+                document.getElementById('preview-iframe').src = '/preview/' + filename;
+            }
+        }
+
+        async function triggerDryRun() {
+            showNotification('Running Dry-Run Preview generation...');
+            try {
+                const res = await fetch('/api/run-dry-run', { method: 'POST' });
+                const data = await res.json();
+                showNotification('Dry-Run Completed! Rendered preview HTML files created.');
+                loadPreviewsList();
+                if (currentTab === 'logs') loadLogs();
+            } catch (err) {
+                showNotification('Dry-run execution error', true);
+            }
+        }
+
+        function openTestModal() {
+            document.getElementById('test-modal').classList.add('active');
+        }
+
+        function closeTestModal() {
+            document.getElementById('test-modal').classList.remove('active');
+        }
+
+        async function submitTestSend() {
+            const email = document.getElementById('test-email-input').value.trim();
+            if (!email) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            closeTestModal();
+            showNotification(`Sending single test email to ${email}...`);
+            
+            try {
+                const res = await fetch('/api/run-test-send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification(`Test email sent successfully to ${email}!`);
+                } else {
+                    showNotification(`Test send error: ${data.error}`, true);
+                }
+                if (currentTab === 'logs') loadLogs();
+            } catch (err) {
+                showNotification('Failed to dispatch test email', true);
+            }
+        }
+
+        async function triggerBulkSend() {
+            if (!confirm('Are you sure you want to start the live bulk email dispatch?')) return;
+            showNotification('Starting bulk email dispatch...');
+            try {
+                const res = await fetch('/api/run-bulk-send', { method: 'POST' });
+                const data = await res.json();
+                showNotification('Bulk dispatch execution finished.');
+                if (currentTab === 'logs') loadLogs();
+            } catch (err) {
+                showNotification('Bulk send execution error', true);
+            }
+        }
+    </script>
+</body>
+</html>

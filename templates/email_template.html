@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Update & Special Offer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.6;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+        .details-card {
+            background: #f8fafc;
+            border-left: 4px solid #2a5298;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .details-card table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details-card td {
+            padding: 6px 0;
+            font-size: 14px;
+        }
+        .label {
+            font-weight: 600;
+            color: #555555;
+            width: 120px;
+        }
+        .value {
+            color: #111111;
+        }
+        .btn-container {
+            text-align: center;
+            margin: 30px 0 15px 0;
+        }
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+        }
+        .footer {
+            background-color: #f1f5f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Thank You for Your Order!</h1>
+        </div>
+        <div class="content">
+            <div class="greeting">Hello {{ name }},</div>
+            <p>We are excited to let you know that your order for <strong>{{ product }}</strong> is being processed.</p>
+            
+            <div class="details-card">
+                <table>
+                    <tr>
+                        <td class="label">Order ID:</td>
+                        <td class="value">#{{ order_id }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Product:</td>
+                        <td class="value">{{ product }}</td>
+                    </tr>
+                    {% if promo_code %}
+                    <tr>
+                        <td class="label">Promo Code:</td>
+                        <td class="value"><span style="background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-weight: bold;">{{ promo_code }}</span></td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            <p>Use your promo code on your next purchase to enjoy an exclusive discount!</p>
+
+            <div class="btn-container">
+                <a href="https://example.com/orders/{{ order_id }}" class="btn">Track Your Order</a>
+            </div>
+        </div>
+        <div class="footer">
+            &copy; 2026 Email Automation System. All rights reserved.<br>
+            If you have any questions, contact our support team.
+        </div>
+    </div>
+</body>
+</html>
